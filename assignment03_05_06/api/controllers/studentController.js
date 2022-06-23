@@ -6,7 +6,7 @@ module.exports.getAll = function(req, res){
 }
 
 module.exports.getOne = function(req, res){
-    const studentId = req.params.studentId;
+    const studentId = req.params.id;
     const theStudent = studentData[studentId];
     console.log("GET school with studentId ", studentId);
     res.status(200).json(theStudent);
