@@ -1,10 +1,9 @@
 {
-  "name": "assignment03",
+  "name": "assignment03_05_06",
   "version": "1.0.0",
-  "description": "Day 03 assignment",
-  "main": "assignment03.js",
+  "description": "assignment03 solution for point 5 and 6",
+  "main": "assignment03_05_06.js",
   "scripts": {
-    "start":"assignment03.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Navin Paudel",
