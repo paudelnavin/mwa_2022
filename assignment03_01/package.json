@@ -4,7 +4,7 @@
   "description": "Day 03 assignment",
   "main": "assignment03.js",
   "scripts": {
-    "start":"assignment03.js",
+    "start": "assignment03.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Navin Paudel",
