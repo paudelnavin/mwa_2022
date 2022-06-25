@@ -6,9 +6,8 @@ module.exports.createOne = function(req, res){
     const gamesCollections = db.collection("games");
     let newGame = {};
     console.log(req.body);
-    // if(req.body && req.body.title && req.body.price && req.body.minPlayers > 1 && req.body.minPlayers < 11
-    //     && req.body.minAge > 6 && req.body.minAge < 99 ){
-        if(req.body ){
+    if(req.body && req.body.title && req.body.price && req.body.minPlayers > 1 && req.body.minPlayers < 11
+        && req.body.minAge > 6 && req.body.minAge < 99 ){
         newGame.title = req.body.title;
         newGame.price = req.body.price;
         newGame.minPlayers = req.body.minPlayers;
