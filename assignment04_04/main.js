@@ -1,8 +1,9 @@
+require("dotenv").config();
 require("./data/dbconnection.js").open();
 const express = require("express");
 const app = express();
-require("dotenv").config();
 const routes = require("./routes");
+
 
 console.log("App started");
 
