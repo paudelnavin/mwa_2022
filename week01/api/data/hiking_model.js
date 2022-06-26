@@ -19,8 +19,8 @@ const hikingSchema = mongoose.Schema({
     length: {
         type: String,
         required: true,
-        min: 4,
-        max: 50
+        min: process.env.MIN_LENGTH,
+        max: process.env.MIN_LENGTH
     },
     length_unit: {
         type: String,
