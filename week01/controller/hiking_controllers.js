@@ -32,8 +32,8 @@ const getAllHikings = function (req, res) {
     if (req.query && req.query.count) {
         count = parseInt(req.query.count, process.env.BASE_NUMBER);
     }
-    if(isNaN(offset) || isNaN(count)){
-        res.status(process.env.STATUS_NOT_FOUND).json({"message": "QueryString Offset and Count should be in numbers"});
+    if (isNaN(offset) || isNaN(count)) {
+        res.status(process.env.STATUS_NOT_FOUND).json({ "message": "QueryString Offset and Count should be in numbers" });
         return;
     }
     if (count > maxCount) {
@@ -58,7 +58,7 @@ const getOneHiking = function (req, res) {
     Hiking.findById(hikingId).exec(function (err, hiking) {
         if (err) {
             console.log("Error finding game");
-            res.status(process.env.STATUS_INTERNAL_ERROR).json({"message":"It is not a valid Id"});
+            res.status(process.env.STATUS_INTERNAL_ERROR).json({ "message": "It is not a valid Id" });
         } else if (!hiking) {
             console.log("Hiking id not found");
             res.status(process.env.STATUS_NOT_FOUND).json({ "message": "Hiking ID not found" });
@@ -84,14 +84,14 @@ const updateHiking = function (req, res) {
             console.log("Error Updating game");
             response.status = STATUS_INTERNAL_ERROR;
             response.message = err;
-            res.status(process.env.STATUS_INTERNAL_ERROR).json({"message":"It is not a valid Id"})
-        }else if (!hiking) {
+            res.status(process.env.STATUS_INTERNAL_ERROR).json({ "message": "It is not a valid Id" })
+        } else if (!hiking) {
             console.log("Hiking id not found");
             res.status(process.env.STATUS_NOT_FOUND).json({ "message": "Hiking ID not found" });
-        }else{
+        } else {
             res.status(response.status).json(response.message);
         }
-        
+
     });
 }
 
@@ -99,14 +99,14 @@ const deleteHiking = function (req, res) {
     const hikingId = req.params.hikingId;
     Hiking.findByIdAndDelete(hikingId).exec(function (err, deletedhiking) {
         const response = { status: process.env.STATUS_OK, message: deletedhiking }
-        if(err) {
+        if (err) {
             console.log("Error during deletion");
-            res.status(process.env.STATUS_INTERNAL_ERROR).json({"message":"It is not a valid Id"})
-        }else if(!deletedhiking){
+            res.status(process.env.STATUS_INTERNAL_ERROR).json({ "message": "It is not a valid Id" })
+        } else if (!deletedhiking) {
             console.log("Hiking id not found");
             res.status(process.env.STATUS_NOT_FOUND).json({ "message": "Hiking ID not found" });
-        }else{
-            res.status(response.status).json({"message":"succesfully deleted below hiking " + response.message});
+        } else {
+            res.status(response.status).json({ "message": "succesfully deleted below hiking " + response.message });
         }
     });
 }
@@ -205,7 +205,7 @@ const UpdateHikingRoutePlant = function (req, res) {
     const plantId = req.params.plantId;
     const hikingId = req.params.hikingId;
     Hiking.findById(hikingId).select("routePlants").exec(function (err, hiking) {
-        console.log("Found routePlants " + hiking.routePlants.id(plantId) + " for hikings" + hiking);
+        // console.log("Found routePlants " + hiking.routePlants.id(plantId) + " for hikings" + hiking);
         const response = { status: process.env.STATUS_OK, message: hiking };
         if (err) {
             console.log("Error finding game");
@@ -227,8 +227,12 @@ const UpdateHikingRoutePlant = function (req, res) {
 }
 
 const _updataRoutePlant = function (req, res, hiking) {
-    hiking.routePlants.id(req.params.id).name = req.body.name;
-    hiking.routePlants.id(req.params.id).description = req.body.description;
+    for (var i = 0; i < hiking.routePlants.length; i++) {
+        if (hiking.routePlants[i].id == req.params.plantId) {
+            hiking.routePlants[i].name = req.body.name;
+            hiking.routePlants[i].description = req.body.description;
+        }
+    }
     hiking.save(function (err, updateHiking) {
         const response = { status: process.env.STATUS_OK, message: [] };
         if (err) {
