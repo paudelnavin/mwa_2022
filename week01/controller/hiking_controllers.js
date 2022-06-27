@@ -126,7 +126,7 @@ const deleteAllHikings = function (req, res) {
 const addHikingRoutePlant = function (req, res) {
     const hikingId = req.params.hikingId;
     Hiking.findById(hikingId).select("routePlants").exec(function (err, hiking) {
-        console.log("Found hiking " + hiking);
+        // console.log("Found hiking " + hiking);
         const response = { status: process.env.STATUS_OK, message: hiking };
         if (err) {
             console.log("Error Finding game");
@@ -169,7 +169,7 @@ const _addRoutePlant = function (req, res, hiking) {
 const getAllHikingsRoutePlants = function (req, res) {
     const hikingId = req.params.hikingId;
     Hiking.findById(hikingId).select("routePlants").exec(function (err, hiking) {
-        console.log("Found routePlants " + hiking.routePlants + " for hikings" + hiking);
+        // console.log("Found routePlants " + hiking.routePlants + " for hikings" + hiking);
         const response = { status: process.env.STATUS_OK, message: hiking };
         if (err) {
             console.log("Error finding game");
@@ -193,7 +193,7 @@ const getOneHikingRoutePlant = function (req, res) {
     const hikingId = req.params.hikingId;
     const plantId = req.params.plantId;
     Hiking.findById(hikingId).select("routePlants").exec(function (err, hiking) {
-        console.log("Found routePlants " + hiking.routePlants.id(plantId) + " for hikings" + hiking);
+        // console.log("Found routePlants " + hiking.routePlants.id(plantId) + " for hikings" + hiking);
         const response = { status: process.env.STATUS_OK, message: hiking };
         if (err) {
             console.log("Error finding game");
@@ -262,7 +262,7 @@ const _updataRoutePlant = function (req, res, hiking) {
 const deleteAllHikingRoutePlant = function (req, res) {
     const hikingId = req.params.hikingId;
     Hiking.findById(hikingId).select("routePlants").exec(function (err, hiking) {
-        console.log("Found routePlants " + hiking.routePlants + " for hikings" + hiking);
+        // console.log("Found routePlants " + hiking.routePlants + " for hikings" + hiking);
         const response = { status: process.env.STATUS_OK, message: hiking };
         if (err) {
             console.log("Error finding game");
@@ -303,7 +303,7 @@ const deleteOneHikingRoutePlant = function (req, res) {
     const hikingId = req.params.hikingId;
     const plantId = req.params.plantId;
     Hiking.findById(hikingId).select("routePlants").exec(function (err, hiking) {
-        console.log("Found routePlants " + hiking.routePlants.id(plantId) + " for hikings" + hiking);
+        // console.log("Found routePlants " + hiking.routePlants.id(plantId) + " for hikings" + hiking);
         const response = { status: process.env.STATUS_OK, message: hiking };
         if (err) {
             console.log("Error finding game");
