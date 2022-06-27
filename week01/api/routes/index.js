@@ -9,12 +9,13 @@ var jsonParser = bodyParser.json()
 //Main documents
 router.route("/hikings")
     .get(hikingController.getAllHikings)
-    .post(jsonParser, hikingController.addHiking);
+    .post(jsonParser, hikingController.addHiking)
+    .delete(hikingController.deleteAllHikings);
 
 router.route("/hikings/:hikingId")
     .get(hikingController.getOneHiking)
     .put(jsonParser, hikingController.updateHiking)
-    .delete(hikingController.deleteHiking);
+    .delete(hikingController.deleteOneHiking);
 
 //Sub documents
 router.route("/hikings/:hikingId/plants")

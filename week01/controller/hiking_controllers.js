@@ -95,7 +95,7 @@ const updateHiking = function (req, res) {
     });
 }
 
-const deleteHiking = function (req, res) {
+const deleteOneHiking = function (req, res) {
     const hikingId = req.params.hikingId;
     Hiking.findByIdAndDelete(hikingId).exec(function (err, deletedhiking) {
         const response = { status: process.env.STATUS_OK, message: deletedhiking }
@@ -107,6 +107,18 @@ const deleteHiking = function (req, res) {
             res.status(process.env.STATUS_NOT_FOUND).json({ "message": "Hiking ID not found" });
         } else {
             res.status(response.status).json({ "message": "succesfully deleted below hiking " + response.message });
+        }
+    });
+}
+
+const deleteAllHikings = function (req, res) {
+    Hiking.deleteMany({}, function (err, hikings) {
+        const response = { status: process.env.STATUS_OK, message: hikings };
+        if (err) {
+            response.status = process.env.STATUS_INTERNAL_ERROR;
+            response.message = err;
+        } else {
+            res.status(response.status).json({ "message": "successfully deleted documnet" });
         }
     });
 }
@@ -332,7 +344,8 @@ module.exports = {
     getAllHikings,
     getOneHiking,
     updateHiking,
-    deleteHiking,
+    deleteOneHiking,
+    deleteAllHikings,
     addHikingRoutePlant,
     getAllHikingsRoutePlants,
     getOneHikingRoutePlant,
