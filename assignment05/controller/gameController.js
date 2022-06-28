@@ -68,7 +68,7 @@ const getAllGame = function (req, res) {
 }
 
 const getOneGame = function (req, res) {
-    const gameId = req.params.id;
+    const gameId = req.params.gameId;
     Game.findById(gameId).exec(function (err, game) {
         const response = {
             status: process.env.STATUS_OK,
@@ -90,7 +90,7 @@ const getOneGame = function (req, res) {
 };
 
 const _updateOne = function (req, res, updateGameCallback) {
-    const gameId = req.params.id;
+    const gameId = req.params.gameId;
     Game.findById(gameId).exec(function (err, game) {
         const response = {
             status: process.env.STATUS_UPDATED,
@@ -176,7 +176,7 @@ const partialUpdateOneGame = function (req, res) {
 }
 
 const deleteGame = function (req, res) {
-    const gameId = req.params.id;
+    const gameId = req.params.gameId;
     Game.findByIdAndDelete(gameId).exec(function (err, game) {
         if (err) {
             res.status(process.env.STATUS_INTERNAL_ERROR).json({ "message": "Game id is not valid" });
