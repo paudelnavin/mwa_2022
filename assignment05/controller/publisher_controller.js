@@ -3,9 +3,7 @@ const Game = mongoose.model(process.env.GAME_MODEL);
 
 const _addPublisher = function (req, res, game) {
     game.publisher.name = req.body.name;
-    game.publisher.country = req.body.country
-    game.publisher.established = req.body.established
-    game.publisher.location.coordinates = [parseFloat(req.body.lng), parseFloat(req.body.lat)]
+    game.publisher.country = req.body.country;
 
     game.save(function (err, updatedGame) {
         const response = { status: process.env.SATUS_OK, message: [] };
@@ -66,8 +64,6 @@ const _updateOne = function (req, res, publisherUpdateCallback) {
 const _fullPublisherUpdate = function (req, res, game) {
     game.publisher.name = req.body.name;
     game.publisher.country = req.body.country
-    game.publisher.established = req.body.established
-    game.publisher.location.coordinates = [parseFloat(req.body.lng), parseFloat(req.body.lat)]
 
     game.save(function (err, updatedGame) {
         const response = {
@@ -89,15 +85,10 @@ const _partialPublisherUpdate = function (req, res, game) {
     if (req.body.country) {
         game.publisher.country = req.body.country
     }
-    if (req.body.established) {
-        game.publisher.established = req.body.established
-    }
-    if (req.body.lng && req.body.lat) {
-        game.publisher.location.coordinates = [parseFloat(req.body.lng), parseFloat(req.body.lat)]
-    }
+
     game.save(function (err, updatedGame) {
         const response = {
-            status: 204, message: updatedGame.publisher
+            status: process.env.STATUS_SUCCESSFULLY_CREATED, message: updatedGame.publisher
         }
         if (err) {
             response.status = process.env.STATUS_INTERNAL_ERROR
@@ -109,24 +100,25 @@ const _partialPublisherUpdate = function (req, res, game) {
 }
 
 const getAllPublishers = function (req, res, publisherUpdateCallback) {
-    console.log("Update One Publisher Controller");
-    const gameId = req.params.gameId
+    const gameId = req.params.gameId;
     Game.findById(gameId).select("publisher").exec(function (err, game) {
-        const response = { status: 204, message: game }
+        const response = { status: process.env.STATUS_OK, message: game };
         if (err) {
-            console.log("Error Finding game");
-            response.status = process.env.STATUS_INTERNAL_ERROR
-            response.message = err
-        } else if (!game) {
-            console.log("Game with given ID not found");
-            response.status = process.env.STATUS_NOT_FOUND
-            response.message = { message: "Game ID not found" }
+            console.log("Error finding game");
+            response.status = process.env.STATUS_INTERNAL_ERROR;
+            response.message = err;
         }
-        if (response.status !== 204) {
-            res.status(response.status).json(response.message)
+        if (!game) {
+            console.log("Error finding game");
+            response.status = process.env.STATUS_NOT_FOUND;
+            response.message = { "message": "Hiking Id not found " + gameId };
         }
-        publisherUpdateCallback(req, res, game)
-    })
+        if (game) {
+            res.status(response.status).json(game.publisher);
+        } else {
+            res.status(response.status).json(response.message);
+        }
+    });
 }
 
 const fullyUpdateOnePublisher = function (req, res) {

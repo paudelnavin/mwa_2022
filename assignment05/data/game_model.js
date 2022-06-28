@@ -6,23 +6,15 @@ const publisherSchema = mongoose.Schema({
             type: String,
             required: true
         },
-        location: { 
-            coordinates: {
-                type: [Number],
-                index: "2dsphere"
-            }
-        },
-        country: String,
-        established: Number
+        country: String
       }
 });
 
 const reviewSchema = mongoose.Schema({
-        title: {
+        name: {
             type: String,
             required: true
         },
-        rating: Number,
         review: String,
         postDate: Date
 });
