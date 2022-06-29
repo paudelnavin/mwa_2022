@@ -13,7 +13,7 @@ export class GamesComponent implements OnInit {
   
   ngOnInit(): void {
     this._adrienService.getTracks().subscribe({
-      next: (adrienTracks) => {this.adrienTracks = this.adrienTracks},
+      next:(result) => {this.adrienTracks = result},
     });
   }
 
