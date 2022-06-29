@@ -1,19 +1,16 @@
 {
-  "name": "assignment04_03",
+  "name": "assignment04_04",
   "version": "1.0.0",
-  "description": "assignment04 for 3rd number",
-  "main": "index.js",
+  "description": "assignment04 part 04 solution",
+  "main": "main.js",
   "scripts": {
-    "start": "node main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Navin Paudel",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.20.0",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
-    "mongodb": "^4.7.0",
-    "nodemon": "^2.0.18"
+    "mongoose": "^6.4.0"
   }
 }

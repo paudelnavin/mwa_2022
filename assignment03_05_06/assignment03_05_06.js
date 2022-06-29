@@ -10,7 +10,10 @@ console.log("App Started");
 app.use(logFunction.functionLog);
 app.use("/api", routes);
 
-app.listen(process.env.PORT, port.port);
+const server = app.listen(process.env.PORT,function(){
+    const port = server.address().port;
+    console.log(process.env.START_MSG, port);
+});
 
 
 console.log("App ended");
