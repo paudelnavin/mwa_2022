@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const hikingController = require("../../controller/hiking_controllers");
+const plantController = require("../../controller/plant_controller")
 var bodyParser = require('body-parser');
 
 // create application/json parser
@@ -14,19 +15,21 @@ router.route("/hikings")
 
 router.route("/hikings/:hikingId")
     .get(hikingController.getOneHiking)
-    .put(jsonParser, hikingController.updateHiking)
+    .put(jsonParser, hikingController.fullUpdateHiking)
+    .patch(jsonParser, hikingController.partialUpdateHiking)
     .delete(hikingController.deleteOneHiking);
 
 //Sub documents
-router.route("/hikings/:hikingId/plants")
-    .get(hikingController.getAllHikingsRoutePlants)
-    .post(jsonParser, hikingController.addHikingRoutePlant)
-    .delete(hikingController.deleteAllHikingRoutePlant);
+router.route("/hikings/:hikingId/routeplants")
+    .get(plantController.getAllHikingsRoutePlants)
+    .post(jsonParser, plantController.addHikingRoutePlant)
+    .delete(plantController.deleteAllHikingRoutePlant);
 
 
-router.route("/hikings/:hikingId/plants/:plantId")
-    .get(hikingController.getOneHikingRoutePlant)
-    .put(jsonParser, hikingController.UpdateHikingRoutePlant)
-    .delete(hikingController.deleteOneHikingRoutePlant);
+router.route("/hikings/:hikingId/routeplants/:plantId")
+    .get(plantController.getOneHikingRoutePlant)
+    .put(jsonParser, plantController.fullUpdateHikingRoutePlant)
+    .patch(jsonParser, plantController.partialUpdateHikingRoutePlant)
+    .delete(plantController.deleteOneHikingRoutePlant);
 
 module.exports = router;

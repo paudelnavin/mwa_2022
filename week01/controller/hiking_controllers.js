@@ -69,30 +69,85 @@ const getOneHiking = function (req, res) {
     });
 }
 
-const updateHiking = function (req, res) {
+const _updateOne = function (req, res, updateHikingCallback) {
     const hikingId = req.params.hikingId;
-    const updateHiking = {
-        name: req.body.name,
-        endpoint1: req.body.endpoint1,
-        endpoint2: req.body.endpoint2,
-        state: req.body.state,
-        length: req.body.length
-    }
-    Hiking.findByIdAndUpdate(hikingId, updateHiking).exec(function (err, hiking) {
-        const response = { status: process.env.STATUS_OK, message: hiking };
+    Hiking.findById(hikingId).exec(function (err, hiking) {
+        const response = {
+            status: process.env.STATUS_OK,
+            message: hiking
+        }
         if (err) {
-            console.log("Error Updating game");
-            response.status = STATUS_INTERNAL_ERROR;
-            response.message = err;
-            res.status(process.env.STATUS_INTERNAL_ERROR).json({ "message": "It is not a valid Id" })
+            response.status = process.env.STATUS_INTERNAL_ERROR;
+            response.message = { "message": "Game Id is not valid" };
         } else if (!hiking) {
-            console.log("Hiking id not found");
-            res.status(process.env.STATUS_NOT_FOUND).json({ "message": "Hiking ID not found" });
+            response.status = process.env.STATUS_NOT_FOUND;
+            response.message = { "message": "Game Id not found" };
+        }
+        if (response.status != process.env.STATUS_OK) {
+            res.status(response.status).json(response.message)
         } else {
-            res.status(response.status).json(response.message);
+            updateHikingCallback(req, res, hiking, response)
+        }
+    })
+}
+
+const fullUpdateHiking  =function(req ,res){
+    hikingUpdate = function (req, res, hiking, response) {
+        hiking.name= req.body.name;
+        hiking.endpoint1= req.body.endpoint1;
+        hiking.endpoint2= req.body.endpoint2;
+        hiking.state= req.body.state;
+        hiking.length= req.body.length;
+        hiking.length_unit= req.body.length_unit;
+
+        hiking.save(function (err, updatedHiking) {
+            if (err) {
+                response.status = process.env.STATUS_INTERNAL_ERROR
+                response.message = err;
+            } else {
+                response.status = process.env.STATUS_OK
+                response.message = updatedHiking
+            }
+            console.log(updatedHiking);
+            res.status(response.status).json(response.message)
+        })
+    }
+    _updateOne(req, res, hikingUpdate)
+}
+const partialUpdateHiking  =function(req ,res){
+    hikingUpdate = function (req, res, hiking, response) {
+        if(req.body.name){
+            hiking.name= req.body.name;
+        }
+        if(req.body.endpoint1){
+            hiking.endpoint1= req.body.endpoint1;
+        }
+        if(req.body.endpoint2){
+            hiking.endpoint2= req.body.endpoint2;
+        }
+        if(req.body.state){
+            hiking.state= req.body.state;
+        }
+        if(req.body.length){
+            hiking.length= req.body.length;
+        }
+        if(req.body.length_unit){
+            hiking.length_unit= req.body.length_unit;
         }
 
-    });
+        hiking.save(function (err, updatedHiking) {
+            if (err) {
+                response.status = process.env.STATUS_INTERNAL_ERROR
+                response.message = err;
+            } else {
+                response.status = process.env.STATUS_OK
+                response.message = updatedHiking
+            }
+            console.log(updatedHiking);
+            res.status(response.status).json(response.message)
+        })
+    }
+    _updateOne(req, res, hikingUpdate)
 }
 
 const deleteOneHiking = function (req, res) {
@@ -123,233 +178,12 @@ const deleteAllHikings = function (req, res) {
     });
 }
 
-const addHikingRoutePlant = function (req, res) {
-    const hikingId = req.params.hikingId;
-    Hiking.findById(hikingId).select("routePlants").exec(function (err, hiking) {
-        console.log("Found hiking " + hiking);
-        const response = { status: process.env.STATUS_OK, message: hiking };
-        if (err) {
-            console.log("Error Finding game");
-            response.status = process.env.STATUS_INTERNAL_ERROR;
-            response.message = err;
-        }
-        if (!hiking) {
-            console.log("Error finding game");
-            response.status = process.env.STATUS_NOT_FOUND;
-            response.message = { "message": "Hiking Id not found " + hikingId };
-        }
-        if (hiking) {
-            _addRoutePlant(req, res, hiking);
-        } else {
-            res.status(response.status).json(response.message);
-        }
-    });
-}
-
-const _addRoutePlant = function (req, res, hiking) {
-    const newPlant = {
-        name: req.body.name,
-        description: req.body.description
-    }
-    hiking.routePlants.push(newPlant);
-    hiking.save(function (err, updateHiking) {
-        const response = { status: process.env.STATUS_OK, message: [] };
-        if (err) {
-            console.log("Could not update");
-            response.status = process.env.STATUS_INTERNAL_ERROR;
-            response.message = err;
-        } else {
-            response.status = process.env.STATUS_SUCCESSFULLY_CREATED;
-            response.message = updateHiking.routePlants;
-        }
-        res.status(response.status).json(response.message);
-    });
-}
-
-const getAllHikingsRoutePlants = function (req, res) {
-    const hikingId = req.params.hikingId;
-    Hiking.findById(hikingId).select("routePlants").exec(function (err, hiking) {
-        console.log("Found routePlants " + hiking.routePlants + " for hikings" + hiking);
-        const response = { status: process.env.STATUS_OK, message: hiking };
-        if (err) {
-            console.log("Error finding game");
-            response.status = process.env.STATUS_INTERNAL_ERROR;
-            response.message = err;
-        }
-        if (!hiking) {
-            console.log("Error finding game");
-            response.status = process.env.STATUS_NOT_FOUND;
-            response.message = { "message": "Hiking Id not found " + hikingId };
-        }
-        if (hiking) {
-            res.status(response.status).json(hiking.routePlants);
-        } else {
-            res.status(response.status).json(response.message);
-        }
-    });
-}
-
-const getOneHikingRoutePlant = function (req, res) {
-    const hikingId = req.params.hikingId;
-    const plantId = req.params.plantId;
-    Hiking.findById(hikingId).select("routePlants").exec(function (err, hiking) {
-        console.log("Found routePlants " + hiking.routePlants.id(plantId) + " for hikings" + hiking);
-        const response = { status: process.env.STATUS_OK, message: hiking };
-        if (err) {
-            console.log("Error finding game");
-            response.status = process.env.STATUS_INTERNAL_ERROR;
-            response.message = err;
-        }
-        if (!hiking) {
-            console.log("Error finding game");
-            response.status = process.env.STATUS_NOT_FOUND;
-            response.message = { "message": "Hiking Id not found " + hikingId };
-        }
-        if (hiking) {
-            res.status(response.status).json(hiking.routePlants.id(plantId));
-        } else {
-            res.status(response.status).json(response.message);
-        }
-    });
-}
-
-const UpdateHikingRoutePlant = function (req, res) {
-    const plantId = req.params.plantId;
-    const hikingId = req.params.hikingId;
-    Hiking.findById(hikingId).select("routePlants").exec(function (err, hiking) {
-        // console.log("Found routePlants " + hiking.routePlants.id(plantId) + " for hikings" + hiking);
-        const response = { status: process.env.STATUS_OK, message: hiking };
-        if (err) {
-            console.log("Error finding game");
-            response.status = process.env.STATUS_INTERNAL_ERROR;
-            response.message = err;
-        }
-        if (!hiking) {
-            console.log("Error finding game");
-            response.status = process.env.STATUS_NOT_FOUND;
-            response.message = { "message": "Hiking Id not found " + hikingId };
-        }
-        if (hiking) {
-            _updataRoutePlant(req, res, hiking);
-        } else {
-            res.status(response.status).json(response.message);
-        }
-
-    });
-}
-
-const _updataRoutePlant = function (req, res, hiking) {
-    for (var i = 0; i < hiking.routePlants.length; i++) {
-        if (hiking.routePlants[i].id == req.params.plantId) {
-            hiking.routePlants[i].name = req.body.name;
-            hiking.routePlants[i].description = req.body.description;
-        }
-    }
-    hiking.save(function (err, updateHiking) {
-        const response = { status: process.env.STATUS_OK, message: [] };
-        if (err) {
-            console.log("Could not update");
-            response.status = process.env.STATUS_INTERNAL_ERROR;
-            response.message = err;
-        } else {
-            response.status = process.env.STATUS_OK;
-            response.message = updateHiking.routePlants;
-        }
-        res.status(response.status).json(response.message);
-    });
-}
-
-const deleteAllHikingRoutePlant = function (req, res) {
-    const hikingId = req.params.hikingId;
-    Hiking.findById(hikingId).select("routePlants").exec(function (err, hiking) {
-        console.log("Found routePlants " + hiking.routePlants + " for hikings" + hiking);
-        const response = { status: process.env.STATUS_OK, message: hiking };
-        if (err) {
-            console.log("Error finding game");
-            response.status = process.env.STATUS_INTERNAL_ERROR;
-            response.message = err;
-        }
-        if (!hiking) {
-            console.log("Error finding game");
-            response.status = process.env.STATUS_NOT_FOUND;
-            response.message = { "message": "Hiking Id not found " + hikingId };
-        }
-        if (hiking) {
-            _deleteRoutePlant(req, res, hiking);
-        } else {
-            res.status(response.status).json(response.message);
-        }
-
-    });
-}
-
-const _deleteRoutePlant = function (req, res, hiking) {
-    hiking.routePlants = [];
-    hiking.save(function (err, updateHiking) {
-        const response = { status: process.env.STATUS_DELETED, message: [] };
-        if (err) {
-            console.log("Could not delete");
-            response.status = process.env.STATUS_INTERNAL_ERROR;
-            response.message = err;
-        } else {
-            response.status = process.env.STATUS_OK;
-            response.message = updateHiking.routePlants;
-        }
-        res.status(response.status).json(response.message);
-    });
-}
-
-const deleteOneHikingRoutePlant = function (req, res) {
-    const hikingId = req.params.hikingId;
-    const plantId = req.params.plantId;
-    Hiking.findById(hikingId).select("routePlants").exec(function (err, hiking) {
-        console.log("Found routePlants " + hiking.routePlants.id(plantId) + " for hikings" + hiking);
-        const response = { status: process.env.STATUS_OK, message: hiking };
-        if (err) {
-            console.log("Error finding game");
-            response.status = process.env.STATUS_INTERNAL_ERROR;
-            response.message = err;
-        }
-        if (!hiking) {
-            console.log("Error finding game");
-            response.status = process.env.STATUS_NOT_FOUND;
-            response.message = { "message": "Hiking Id not found " + hikingId };
-        }
-        if (hiking) {
-            _deleteOneRoutePlant(req, res, hiking);
-        } else {
-            res.status(response.status).json(response.message);
-        }
-
-    });
-}
-const _deleteOneRoutePlant = function (req, res, hiking) {
-    var doc = hiking.routePlants.id(req.params.plantId).remove();
-    hiking.save(function (err, updateHiking) {
-        const response = { status: process.env.STATUS_DELETED, message: [] };
-        if (err) {
-            console.log("Could not delete");
-            response.status = process.env.STATUS_INTERNAL_ERROR;
-            response.message = err;
-        } else {
-            response.status = process.env.STATUS_OK;
-            response.message = updateHiking.routePlants;
-        }
-        res.status(response.status).json(response.message);
-    });
-}
-
 module.exports = {
     addHiking,
     getAllHikings,
     getOneHiking,
-    updateHiking,
+    fullUpdateHiking,
+    partialUpdateHiking,
     deleteOneHiking,
-    deleteAllHikings,
-    addHikingRoutePlant,
-    getAllHikingsRoutePlants,
-    getOneHikingRoutePlant,
-    UpdateHikingRoutePlant,
-    deleteAllHikingRoutePlant,
-    deleteOneHikingRoutePlant
+    deleteAllHikings
 }

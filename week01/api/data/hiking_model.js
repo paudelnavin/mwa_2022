@@ -24,7 +24,6 @@ const hikingSchema = mongoose.Schema({
     },
     length_unit: {
         type: String,
-        required: true,
         "default": "miles"
     },
     routePlants: [routePlantSchema]
