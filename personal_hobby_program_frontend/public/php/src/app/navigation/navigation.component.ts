@@ -10,18 +10,17 @@ import { HikingsDataService } from '../hikings.data.service.service';
 })
 export class NavigationComponent implements OnInit {
 
-  constructor(private routeData:HikingsDataService, private _router:Router) { }
+  constructor(private routeData: HikingsDataService, private _router: Router) { }
 
-  LoginStatus$! : Observable<boolean>;
+  LoginStatus$!: Observable<boolean>;
 
   ngOnInit(): void {
-    this.LoginStatus$ = this.routeData.isLoggesIn;
   }
 
-  onHome():void{
+  onHome(): void {
     this._router.navigate([""])
   }
-  onHikings():void{
+  onHikings(): void {
     this._router.navigate(["gethikings"])
   }
 }

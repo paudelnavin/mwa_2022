@@ -11,20 +11,20 @@ export class SearchComponent implements OnInit {
 
   lat!: Number
   lng!: Number
-  constructor(private hikingData:HikingsDataService) { }
+  constructor(private hikingData: HikingsDataService) { }
 
   ngOnInit(): void {
     this.onSearch();
   }
 
-  hikings:Hiking[]=[]
-  onSearch():void{
-    this.hikingData.searchByGeo(this.lng, this.lat).subscribe(hikings=>{this.hikings=hikings})
+  hikings: Hiking[] = []
+  onSearch(): void {
+    this.hikingData.searchByGeo(this.lng, this.lat).subscribe(hikings => { this.hikings = hikings })
   }
 
-  onClear():void{
-    this.lat=0
-    this.lng=0
+  onClear(): void {
+    this.lat = 0
+    this.lng = 0
   }
 
 }

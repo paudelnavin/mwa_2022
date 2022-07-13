@@ -16,10 +16,10 @@
           <a class="nav-link" routerLink="/register" *ngIf="LoginStatus">Register</a>
         </li>
         <li class="nav-item" *ngIf="!(LoginStatus$ | async) as LoginStatus">
-          <a class="nav-link" routerLink="/getRoutes" *ngIf="LoginStatus">Show Routes</a>
+          <a class="nav-link" routerLink="/gethikings" *ngIf="LoginStatus">Show Routes</a>
         </li>
       <li class="nav-item" *ngIf="!(LoginStatus$ | async) as LoginStatus">
-          <a class="nav-link" routerLink="/addRoutes" *ngIf="LoginStatus">Add Routes</a>
+          <a class="nav-link" routerLink="/addhikings" *ngIf="LoginStatus">Add Routes</a>
         </li>
         <li class="nav-item" *ngIf="!(LoginStatus$ | async) as LoginStatus">
           <a class="nav-link" routerLink="/searchplants" *ngIf="LoginStatus">Search Routes</a>

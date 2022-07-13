@@ -16,8 +16,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { SearchComponent } from './search/search.component';
-import { RoutePlantsComponent } from './route-plants/route-plants.component';
 import { ViewPlantsComponent } from './view-plants/view-plants.component';
+import { EditPlantComponent } from './edit-plant/edit-plant.component';
+import { AddPlantComponent } from './add-plant/add-plant.component';
 
 @NgModule({
   declarations: [
@@ -32,8 +33,9 @@ import { ViewPlantsComponent } from './view-plants/view-plants.component';
     LoginComponent,
     RegisterComponent,
     SearchComponent,
-    RoutePlantsComponent,
-    ViewPlantsComponent
+    ViewPlantsComponent,
+    EditPlantComponent,
+    AddPlantComponent
   ],
   imports: [
     BrowserModule,
@@ -47,27 +49,31 @@ import { ViewPlantsComponent } from './view-plants/view-plants.component';
         component:HomeComponent
       },
       {
-        path:"getRoutes",
+        path:"gethikings",
         component: HikingsComponent
       },
       {
-        path:"routes/:routeId/getPlants",
-        component: ViewPlantsComponent
-      },
-      {
-        path:"getRoutes/:routeId",
+        path:"gethikings/:hikingId",
         component: HikingComponent
       },
       {
-        path:"addRoutes",
+        path:"gethikings/:hikingId/getplants",
+        component: ViewPlantsComponent
+      },
+      {
+        path:"addhikings",
         component: AddHikingComponent
       },
       {
-        path:"routes/:routeId/addPlants",
-        component: RoutePlantsComponent
+        path:"gethikings/:hikingId/addplants",
+        component: AddPlantComponent
       },
       {
-        path:"editRoutes/:routeId",
+        path:"gethikings/:hikingId/editplants/:plantId",
+        component: EditPlantComponent
+      },
+      {
+        path:"edithikings/:hikingId",
         component: EditHikingComponent
       },
       {

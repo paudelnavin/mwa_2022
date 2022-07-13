@@ -24,11 +24,11 @@
         <td>{{hiking.state}}</td>
         <td>{{hiking.distance.length}}</td>
         <td>{{hiking.distance.length_unit}}</td>
-        <td><button routerLink="getRoutes/{{hiking._id}}/getPlants">view route plant details</button></td>
+        <td><button routerLink="/gethikings/{{hiking._id}}/getplants">view route plant details</button></td>
         <td>
-          <button routerLink="/routes/{{hiking._id}}/addPlants">Add Route Plants</button>
-            <button routerLink="/editRoutes/{{hiking._id}}">Edit Routes</button>
-            <button (click)="onDelete()">Delete Routes</button>
+          <button routerLink="/gethikings/{{hiking._id}}/addplants">Add Route Plant</button>
+            <button routerLink="/edithikings/{{hiking._id}}">Edit Route</button>
+            <button (click)="onDelete()">Delete Route</button>
         </td>
       </tr>
     </tbody>
