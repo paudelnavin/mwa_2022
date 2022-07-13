@@ -23,8 +23,7 @@ router.route("/:hikingId")
 //Sub documents
 router.route("/:hikingId/routeplants")
     .get(plantController.getAllHikingsRoutePlants)
-    .post(jsonParser, plantController.addHikingRoutePlant)
-    .delete(plantController.deleteAllHikingRoutePlant);
+    .post(jsonParser, plantController.addHikingRoutePlant);
 
 router.route("/:hikingId/routeplants/:plantId")
     .get(plantController.getOneHikingRoutePlant)

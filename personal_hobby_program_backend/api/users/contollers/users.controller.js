@@ -20,16 +20,16 @@ const _createUser = function (req, hashedPassword) {
 const addUser = function (req, res) {
     let response = CommonFunctions._responseDeclaration();
     response = CommonFunctions._userJsonValidation(req, res, response)
-    if (response.status != process.env.STATUS_INTERNAL_ERROR){
+    if (response.status != process.env.STATUS_INTERNAL_ERROR) {
         bcrypt.genSalt(process.env.SALT_ROUND)
-        .then((salt) => CommonFunctions._generateHash(salt, req.body.password))
-        .then((hashedPassword) => _createUser(req, hashedPassword))
-        .then((user) => CommonFunctions._fillResponse(response, process.env.STATUS_SUCCESSFULLY_CREATED, user))
-        .catch((error) => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, error))
-        .finally(() =>CommonFunctions._sendResponse(response, res))        
-    }else{
-        CommonFunctions._sendResponse(response,res)
-    }    
+            .then((salt) => CommonFunctions._generateHash(salt, req.body.password))
+            .then((hashedPassword) => _createUser(req, hashedPassword))
+            .then((user) => CommonFunctions._fillResponse(response, process.env.STATUS_SUCCESSFULLY_CREATED, user))
+            .catch((error) => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, error))
+            .finally(() => CommonFunctions._sendResponse(response, res))
+    } else {
+        CommonFunctions._sendResponse(response, res)
+    }
 }
 
 const _checkAccountPassword = function (user, password, response) {
@@ -37,28 +37,28 @@ const _checkAccountPassword = function (user, password, response) {
         bcrypt.compare(password, user.password)
             .then((passwordMatch) => {
                 if (passwordMatch) {
-                    response.status=process.env.STATUS_OK
-                    response.message={}
+                    response.status = process.env.STATUS_OK
+                    response.message = {}
                     resolve(user);
                 }
                 else {
-                    reject( "Unauthorized");
+                    reject("Unauthorized");
                 }
             })
     });
 }
- 
+
 const userLogin = function (req, res) {
-   const response = CommonFunctions._responseDeclaration();
+    const response = CommonFunctions._responseDeclaration();
     if (req.body && req.body.username && req.body.password) {
         User.findOne({ username: req.body.username })
             .then((user) => _checkAccountPassword(user, req.body.password, response))
-            .then((user) =>  CommonFunctions._fillResponse(response, process.env.STATUS_OK, user))
+            .then((user) => CommonFunctions._fillResponse(response, process.env.STATUS_OK, user))
             .catch((err) => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, err))
             .finally(() => CommonFunctions._sendResponse(response, res))
     } else {
         response.status = process.env.STATUS_BAD_REQUEST,
-        response.message = "username and password missing"
+            response.message = "username and password missing"
         res.status(response.status).json(response.message);
     }
 }

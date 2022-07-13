@@ -7,7 +7,7 @@ const _addRoutesPlant = function (req, hiking) {
         name: req.body.name,
         description: req.body.description,
         location: {
-            coordinates: [parseFloat(req.body.lng), parseFloat(req.body.lat)]
+            coordinates: [parseFloat(req.body.location.lng), parseFloat(req.body.location.lat)]
         }
     }
     hiking.route_plants.push(newPlant)
@@ -46,35 +46,46 @@ const getOneHikingRoutePlant = function (req, res) {
 
 const _updateOne = function (req, res, routePlantUpdateCallback) {
     const hikingId = req.params.hikingId
+    const plantId = req.params.plantId
     const response = CommonFunctions._responseDeclaration();
     Hiking.findById(hikingId).exec()
-        .then(hiking => routePlantUpdateCallback(req, res, hiking.route_plants))
-        .then(editedRoutePlant => editedRoutePlant.save())
-        .then(savedRoutePlant => CommonFunctions._fillResponse(response, process.env.STATUS_OK, savedRoutePlant))
+        .then(hiking => routePlantUpdateCallback(req, hiking, plantId))
+        .then(editedHiking => editedHiking.save())
+        .then(savedHiking => CommonFunctions._fillResponse(response, process.env.STATUS_OK, savedHiking))
         .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { "message": "Hiking Id is not valid" }))
         .finally(() => CommonFunctions._sendResponse(response, res))
 }
 
-const _fullRoutePlantUpdate = function (req, routePlant) {
-    routePlant.name = req.body.name;
-    routePlant.description = req.body.description;
-    routePlant.location.coordinates = [parseFloat(req.body.lng), parseFloat(req.body.lat)];
-
-    return routePlant
+const _fullRoutePlantUpdate = function (req, hiking, plantId) {
+    for (i = 0; i < hiking.route_plants.length; i++) {
+        existingRouteId = (hiking.route_plants[i]._id).toString()
+        if (existingRouteId == plantId) {
+            hiking.route_plants[i].name = req.body.name;
+            hiking.route_plants[i].description = req.body.description;
+            hiking.route_plants[i].location.coordinates = [parseFloat(req.body.lng), parseFloat(req.body.lat)];
+        }
+        return hiking
+    }
 }
 
-const _partialRoutePlantUpdate = function (req, routePlant) {
-    if (req.body.name) {
-        routePlant.name = req.body.name;
-    }
-    if (req.body.description) {
-        routePlant.description = req.body.description;
-    }
-    if (req.body.lng && req.body.lat) {
-        routePlant.location.coordinates = [parseFloat(req.body.location.lng), parseFloat(req.body.location.lat)];
+const _partialRoutePlantUpdate = function (req, hiking, plantId) {
+    for (i = 0; i < hiking.route_plants.length; i++) {
+        existingRouteId = (hiking.route_plants[i]._id).toString()
+        if (existingRouteId == plantId) {
+            console.log(true);
+            if (req.body.name) {
+                hiking.route_plants[i].name = req.body.name;
+            }
+            if (req.body.description) {
+                hiking.route_plants[i].description = req.body.description;
+            }
+            if (req.body.location.lng && req.body.location.lat) {
+                hiking.route_plants[i].location.coordinates = [parseFloat(req.body.location.lng), parseFloat(req.body.location.lat)];
+            }
+        }
     }
 
-    return routePlant;
+    return hiking;
 }
 
 const fullUpdateHikingRoutePlant = function (req, res) {
@@ -85,25 +96,29 @@ const partialUpdateHikingRoutePlant = function (req, res) {
     _updateOne(req, res, _partialRoutePlantUpdate)
 }
 
-const deleteAllHikingRoutePlant = function (req, res) {
-    const hikingId = req.params.hikingId
-    const response = CommonFunctions._responseDeclaration();
-    Hiking.findById(hikingId).exec()
-        .then(hiking => hiking.route_plants=[])
-        .then(()=>CommonFunctions._fillResponse(response, process.env.STATUS_OK, {"message":"Successfully deleted"}))
-        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { "message": "Hiking Id is not valid" }))
-        .finally(() => CommonFunctions._sendResponse(response, res))
-}
-
 const deleteOneHikingRoutePlant = function (req, res) {
     const hikingId = req.params.hikingId
     const plantId = req.params.plantId
     const response = CommonFunctions._responseDeclaration();
     Hiking.findById(hikingId).exec()
-        .then(hiking =>  hiking.route_plants.remove(plantId))
-        .then(()=>CommonFunctions._fillResponse(response, process.env.STATUS_OK, {"message":"Successfully deleted"}))
-        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { "message": "Hiking Id is not valid" }))
-        .finally(() => CommonFunctions._sendResponse(response, res))
+        .then(hiking => _deleteOne(hiking, plantId))
+        .then((hiking) => hiking.save())
+        .then((hiking) => CommonFunctions._fillResponse(response, process.env.STATUS_OK, { "message": "Successfully delted route plant " + hiking.route_plants }))
+        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { "message": "Plant Id not found" }))
+        .finally(() => CommonFunctions._sendResponse(response, res));
+}
+
+const _deleteOne = function (hiking, plantId) {
+    return new Promise((resolve, reject) => {
+        let updatedHiking = hiking.route_plants.id(plantId);
+        if (updatedHiking == null) {
+            reject({ message: process.env.STATUS_NOT_FOUND });
+        }
+        else {
+            hiking.route_plants.id(plantId).remove();
+            resolve(hiking);
+        }
+    })
 }
 
 module.exports = {
@@ -112,6 +127,5 @@ module.exports = {
     getOneHikingRoutePlant,
     fullUpdateHikingRoutePlant,
     partialUpdateHikingRoutePlant,
-    deleteAllHikingRoutePlant,
     deleteOneHikingRoutePlant
 }

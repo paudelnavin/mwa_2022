@@ -45,14 +45,14 @@ const _checkError = function (hiking, response, error) {
 
 const _jsonValidation = function (req, res) {
     if ((!req.body && !req.body.name && !req.body.distance.length && !req.body.state) ||
-        (req.body.name != "" && req.body.distance.length != "" && req.body.state!="")) {
+        (req.body.name != "" && req.body.distance.length != "" && req.body.state != "")) {
         return res.status(process.env.STATUS_INTERNAL_ERROR).json({ "message": "Name, state and length is required field" });
     }
 }
 
 const _userJsonValidation = function (req, res, response) {
     if ((req.body && req.body.username && req.body.password) &&
-    (req.body.username.length>=5 && req.body.password.length>=6)) {
+        (req.body.username.length >= 5 && req.body.password.length >= 6)) {
         response.status = process.env.STATUS_OK;
         response.message = {};
     } else {

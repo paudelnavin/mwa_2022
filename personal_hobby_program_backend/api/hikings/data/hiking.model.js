@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+var mongoosePaginate = require('mongoose-paginate');
+
 
 const routePlantSchema = mongoose.Schema({
     name: String,
@@ -23,19 +25,20 @@ const hikingSchema = mongoose.Schema({
         required: true
     },
     distance: {
-        length:{
+        length: {
             type: String,
             required: true,
             min: process.env.MIN_LENGTH,
             max: process.env.MIN_LENGTH
         },
-        length_unit:{
+        length_unit: {
             type: String,
-            default:"miles"
+            default: "miles"
         }
     },
     route_plants: [routePlantSchema]
 });
 
+hikingSchema.plugin(mongoosePaginate);
 
 mongoose.model("Hiking", hikingSchema, "hikings");
