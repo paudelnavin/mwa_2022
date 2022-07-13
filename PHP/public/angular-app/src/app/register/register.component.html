@@ -1,0 +1,63 @@
+<div *ngIf="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+  <strong>Success!</strong> Your data has been entered successfully.
+  <button (click)="closeAlert()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="container">
+  <form class="form-horizontal" [formGroup]="addForm!" (ngSubmit)="onSubmit(addForm!)">
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="firstname">First Name:</label>
+      <div class="col-sm-3">
+        <input type="email" formControlName ="firstname" class="form-control" id="firstname" placeholder="Enter first name" name="firstname">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="lastname">Last Name:</label>
+      <div class="col-sm-3">          
+        <input class="form-control" formControlName ="lastname" id="lastname" placeholder="Enter last name" name="lastname">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="email">Email:</label>
+      <div class="col-sm-3">          
+        <input type="email" formControlName ="email" class="form-control" id="email" placeholder="Enter email" name="email">
+        <span *ngIf="f['email'].getError('email')!=null" class="errormessage">Invalid email</span><br/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="address">Address:</label>
+      <div class="col-sm-3">          
+        <input class="form-control" formControlName ="address" id="address" placeholder="Enter address" name="address">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="username">Username:</label>
+      <div class="col-sm-3">
+        <input class="form-control" formControlName ="username" id="username" placeholder="Enter username" name="username">
+        <span *ngIf="f['username'].getError('required')!=null" class="errormessage">Enter Username</span><br/>
+        <span *ngIf="f['username'].getError('minlength')!=null" class="errormessage">Username Should be atleast 5</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="password">Password:</label>
+      <div class="col-sm-3">
+        <input type="password" formControlName ="password" class="form-control" id="password" type="password" placeholder="Enter password" name="password">
+        <span *ngIf="f['password'].getError('required')!=null" class="errormessage">Enter Password</span><br/>
+        <span *ngIf="f['password'].getError('minlength')!=null" class="errormessage">Password Should be atleast 6</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="confirmpassword">Confirm Password:</label>
+      <div class="col-sm-3">
+        <input type="password" formControlName ="confirmpassword" class="form-control" id="confirmpassword" type="password" placeholder="Confirm password" name="confirmpassword">
+        <span *ngIf="f['confirmpassword'].getError('MustMatch')!=null" class="errormessage">Password Mismatched</span><br/>
+      </div>
+    </div>
+    <div class="form-group">        
+      <div class="col-sm-offset-2 col-sm-10">
+        <button [disabled]="addForm.invalid" type="submit" class="btn btn-success" (click)="proceed()">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>

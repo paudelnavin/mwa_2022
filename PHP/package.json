@@ -1,0 +1,26 @@
+{
+  "name": "hiking_routes_php",
+  "version": "1.0.0",
+  "description": "hiking routes project",
+  "main": "app.js",
+  "scripts": {
+    "startBackend": "nodemon --inspect",
+    "startFrontend": "cd public/angular-app && npm start",
+    "start": "npm run startBackend | npm run startFrontend",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Navin Paudel",
+  "license": "ISC",
+  "dependencies": {
+    "@auth0/angular-jwt": "^5.0.2",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.4.0",
+    "mongoose-paginate": "^5.0.3",
+    "node-localstorage": "^2.2.1"
+  }
+}

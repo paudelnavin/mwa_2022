@@ -1,0 +1,35 @@
+
+  <div class="container" >
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="lng">Longitude:</label>
+          <div class="col-sm-3">
+            <input  type="number" class="form-control" id="lng" placeholder="Enter longitude" name="lng" [(ngModel)]="lng">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="lat">Latitude:</label>
+          <div class="col-sm-3">          
+            <input type="number" required class="form-control" id="lat" placeholder="Enter latitude" name="lat" [(ngModel)]="lat">
+          </div>
+        </div>
+        <div class="form-group">        
+          <div class="col-sm-2">
+            <button type="submit" class="btn btn-success" (click)="onSearch()">Search</button>
+            <button type="submit" class="btn btn-success" (click)="onClear()">Clear</button>
+          </div>
+        </div>
+        <div class="form-group">
+            <h4>Search List are:</h4>
+            <ul>
+                <li *ngFor="let hiking of hikings">
+                  <a routerLink="/gethikings/{{hiking._id}}">
+                    {{hiking.name}} - {{hiking.state}}
+                </a>
+                </li>    
+            </ul>
+        </div>
+      </form>
+    </div>
+    <div>
+    
