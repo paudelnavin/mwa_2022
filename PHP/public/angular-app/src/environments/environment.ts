@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  Internal_Error: "THis is internal error",
+  Base_URL: "This is base url",
+  Confirmation: "This is confirmation message",
+  Title: "This is title of a application",
+  Backend_URL : "This is node url"
 };
 
 /*

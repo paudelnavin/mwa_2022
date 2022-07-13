@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,17 +10,12 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class AuthenticationService {
 
   #isLoggedIn: boolean = false
-  get isLoggedIn() { return this.#isLoggedIn }
-  set isLoggedIn(isLoggedIn: boolean) { this.#isLoggedIn = isLoggedIn }
 
-  // set token(token){localStorage.setItem("token", token)}
-  // get token(){localStorage.getItem("token") as string;}
-  // get name(){}
-  // _baseUrl: string = "http://localhost:4141/api";
+  _baseUrl: string = environment.Base_URL;
 
-  // isLoggedIn():boolean {
-  //   return (localStorage.getItem("token")!=null);
-  // }
+  isLoggedIn():boolean {
+    return (localStorage.getItem("token")!=null);
+  }
 
   getLoggedInUser(): string {
     let username = localStorage.getItem("username");

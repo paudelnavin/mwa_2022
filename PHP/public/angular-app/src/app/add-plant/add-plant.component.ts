@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 import { HikingsDataService } from '../hikings.data.service.service';
 import { Hiking } from '../hikings/hikings.component';
 
@@ -16,7 +17,7 @@ export class AddPlantComponent implements OnInit {
   get addPlantForm() { return this.#addPlantForm };
   success: boolean = false
   fail: boolean = false
-  internalError: string = "Internal Server Error"
+  internalError: string = environment.Internal_Error
   constructor(private router: ActivatedRoute, private _hikingDataService: HikingsDataService, private _formBuilder: FormBuilder, private _router: Router) { }
 
   hikingId = this.router.snapshot.params["hikingId"];

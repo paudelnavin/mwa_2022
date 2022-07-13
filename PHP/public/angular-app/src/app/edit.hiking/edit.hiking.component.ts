@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 import { HikingsDataService } from '../hikings.data.service.service';
 import { Hiking } from '../hikings/hikings.component';
 
@@ -19,7 +20,7 @@ export class EditHikingComponent implements OnInit {
   hiking!: Hiking
   success: boolean = false
   fail: boolean = false
-  internalError: string = "Internal Server Error"
+  internalError: string = environment.Internal_Error
   ngOnInit(): void {
     this._hikingDataService.getHiking(this.hikingId).subscribe(hiking => {
       console.log(hiking);

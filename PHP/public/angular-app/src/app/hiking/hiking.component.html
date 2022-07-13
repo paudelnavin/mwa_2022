@@ -26,9 +26,9 @@
         <td>{{hiking.distance.length_unit}}</td>
         <td><button routerLink="/gethikings/{{hiking._id}}/getplants">view route plant details</button></td>
         <td>
-          <button routerLink="/gethikings/{{hiking._id}}/addplants">Add Route Plant</button>
-            <button routerLink="/edithikings/{{hiking._id}}">Edit Route</button>
-            <button (click)="onDelete()">Delete Route</button>
+          <button routerLink="/gethikings/{{hiking._id}}/addplants" *ngIf="isLoggedIn">Add Route Plant</button>
+            <button routerLink="/edithikings/{{hiking._id}}" *ngIf="isLoggedIn">Edit Route</button>
+            <button (click)="onDelete()" *ngIf="isLoggedIn">Delete Route</button>
         </td>
       </tr>
     </tbody>

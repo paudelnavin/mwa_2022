@@ -21,7 +21,7 @@ const addHikingRoutePlant = function (req, res) {
         .then((hiking) => _addRoutesPlant(req, hiking))
         .then((addedHiking) => addedHiking.save())
         .then(savedHiking => CommonFunctions._fillResponse(response, process.env.STATUS_OK, savedHiking))
-        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { "message": "Hiking Id not valid" }))
+        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { message: process.env.INVALID_HIKING_ID }))
         .finally(() => CommonFunctions._sendResponse(response, res))
 }
 
@@ -30,7 +30,7 @@ const getAllHikingsRoutePlants = function (req, res) {
     const response = CommonFunctions._responseDeclaration();
     Hiking.findById(hikingId).exec()
         .then((hiking) => CommonFunctions._fillResponse(response, process.env.STATUS_OK, hiking.route_plants))
-        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_OK, { "message": "Hiking Id is not valid" }))
+        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_OK, {message: process.env.INVALID_HIKING_ID }))
         .finally(() => CommonFunctions._sendResponse(response, res))
 }
 
@@ -40,7 +40,7 @@ const getOneHikingRoutePlant = function (req, res) {
     const response = CommonFunctions._responseDeclaration();
     Hiking.findById(hikingId).exec()
         .then(hiking => CommonFunctions._fillResponse(response, process.env.STATUS_OK, hiking.route_plants.id(plantId)))
-        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { "message": "Hiking Id is not valid" }))
+        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { message: process.env.INVALID_HIKING_ID}))
         .finally(() => CommonFunctions._sendResponse(response, res))
 }
 
@@ -52,7 +52,7 @@ const _updateOne = function (req, res, routePlantUpdateCallback) {
         .then(hiking => routePlantUpdateCallback(req, hiking, plantId))
         .then(editedHiking => editedHiking.save())
         .then(savedHiking => CommonFunctions._fillResponse(response, process.env.STATUS_OK, savedHiking))
-        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { "message": "Hiking Id is not valid" }))
+        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { message: process.env.INVALID_HIKING_ID }))
         .finally(() => CommonFunctions._sendResponse(response, res))
 }
 
@@ -103,8 +103,8 @@ const deleteOneHikingRoutePlant = function (req, res) {
     Hiking.findById(hikingId).exec()
         .then(hiking => _deleteOne(hiking, plantId))
         .then((hiking) => hiking.save())
-        .then((hiking) => CommonFunctions._fillResponse(response, process.env.STATUS_OK, { "message": "Successfully delted route plant " + hiking.route_plants }))
-        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { "message": "Plant Id not found" }))
+        .then((hiking) => CommonFunctions._fillResponse(response, process.env.STATUS_OK, { message: process.env.SUCCESSFULLY_DELETED + hiking.route_plants }))
+        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { message: PLANT_ID_NOT_FOUND }))
         .finally(() => CommonFunctions._sendResponse(response, res));
 }
 

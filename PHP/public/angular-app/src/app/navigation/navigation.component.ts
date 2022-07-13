@@ -11,11 +11,13 @@ import { HikingsDataService } from '../hikings.data.service.service';
 })
 export class NavigationComponent implements OnInit {
 
+  isLoggedIn:boolean= false
   constructor(private routeData: HikingsDataService, private _router: Router, private _authService:AuthenticationService) { }
 
   LoginStatus$!: Observable<boolean>;
 
   ngOnInit(): void {
+    this.isLoggedIn = this._authService.isLoggedIn()
   }
 
   onHome(): void {

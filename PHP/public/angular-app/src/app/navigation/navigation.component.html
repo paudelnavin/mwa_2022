@@ -6,7 +6,7 @@
         <a class="nav-link" (click)="onHome()" routerLink="">Home</a>
      </li>
   </ul>
-  <ul class="navbar-nav mr-auto">
+  <ul class="navbar-nav mr-auto" *ngIf="isLoggedIn">
     <li class="nav-item">
        <a class="nav-link" routerLink="/profile">Profile</a>
     </li>
@@ -18,7 +18,7 @@
   </ul>
   <ul class="navbar-nav mr-auto">
      <li class="nav-item">
-        <a class="nav-link" routerLink="/addhikings" >Add Routes</a>
+        <a class="nav-link" routerLink="/addhikings" *ngIf="isLoggedIn">Add Routes</a>
      </li>
   </ul>
   <ul class="navbar-nav mr-auto">
@@ -26,12 +26,12 @@
         <a class="nav-link" routerLink="/searchplants">Search Routes</a>
      </li>
   </ul>
-  <ul class="navbar-nav mr-auto">
+  <ul class="navbar-nav mr-auto" *ngIf="!isLoggedIn">
      <li class="nav-item">
         <a class="nav-link" routerLink="/login">Login</a>
      </li>
   </ul>
-  <ul class="navbar-nav mr-auto navbar-right">
+  <ul class="navbar-nav mr-auto navbar-right" *ngIf="!isLoggedIn">
      <li class="nav-item" >
         <a class="nav-link" routerLink="/register">Register</a>
      </li>

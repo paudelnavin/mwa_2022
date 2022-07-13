@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 import { HikingsDataService } from '../hikings.data.service.service';
 import { Hiking } from '../hikings/hikings.component';
 
@@ -15,7 +16,7 @@ export class AddHikingComponent implements OnInit {
   get addForm() { return this.#addForm };
   success: boolean = false
   fail: boolean = false
-  internalError: string = "Internal Server Error"
+  internalError: string = environment.Internal_Error
   constructor(private _hikingDataService: HikingsDataService, private _formBuilder: FormBuilder) { }
 
   ngOnInit(): void {

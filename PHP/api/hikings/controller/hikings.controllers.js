@@ -3,24 +3,6 @@ const Hiking = mongoose.model(process.env.HIKING_MODEL);
 const CommonFunctions = require("../../shared/shared.functions");
 
 const addHiking = function (req, res) {
-    if (req.body && req.body.name) {
-
-    }
-    if (req.body && req.body.endpoint1) {
-
-    }
-    if (req.body && req.body.endpoint1) {
-
-    }
-    if (req.body && req.body.state) {
-
-    }
-    if (req.body && req.body.distance.length) {
-
-    }
-    if (req.body && req.body.distance.length_unit) {
-
-    }
     const newHiking = {
         name: req.body.name,
         endpoint1: req.body.endpoint1,
@@ -39,7 +21,7 @@ const addHiking = function (req, res) {
             .catch((error) => CommonFunctions._fillResponse(response, process.env.STATUS_NOT_FOUND, error))
             .finally(() => CommonFunctions._sendResponse(response, res))
     } else {
-        return res.status(process.env.STATUS_INTERNAL_ERROR).json({ "message": "Name, state and length is required field" });
+        return res.status(process.env.STATUS_INTERNAL_ERROR).json({message:process.env.LENGTH_REQUIRED});
     }
 }
 
@@ -52,7 +34,7 @@ const getAllHikings = function (req, res) {
     Hiking.find().skip(offset).limit(count).exec()
         .then(function (hikings) {
             if (count < hikings.length) {
-                res.status(process.env.STATUS_NOT_FOUND).json({ "message": "Cannot exceed array length. Total lenght of Hiking is " + hikings.length });
+                res.status(process.env.STATUS_NOT_FOUND).json({message: process.env.LENGTH_CANNOT_EXCEED + hikings.length });
                 return;
             } else {
                 return hikings;
@@ -68,7 +50,7 @@ const _runGeoQuery = function (req, res) {
     const lng = parseFloat(req.query.lng);
     const lat = parseFloat(req.query.lat);
     if (isNaN(lat) || isNaN(lng)) {
-        res.status(500).json({ "message": "QueryString Offset and Count should be in numbers" });
+        res.status(500).json({message: process.env.SHOULD_BE_NUMBERS});
         return;
     }
     let response = CommonFunctions._responseDeclaration();
@@ -100,7 +82,7 @@ const getOneHiking = function (req, res) {
             message = CommonFunctions._validateHiking(hiking);
             CommonFunctions._fillResponse(response, process.env.STATUS_OK, message);
         })
-        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { "message": "Hiking Id is not valid" }))
+        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { message: process.env.INVALID_HIKING_ID}))
         .finally(() => CommonFunctions._sendResponse(response, res))
 }
 
@@ -113,7 +95,7 @@ const _updateOne = function (req, res, updateHikingCallback) {
             response.message = CommonFunctions._validateHiking(hiking);
             updateHikingCallback(req, res, hiking, response);
         })
-        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { "message": "Hiking Id is not valid" }))
+        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { message: process.env.INVALID_HIKING_ID }))
 }
 
 const fullUpdateHiking = function (req, res) {
@@ -166,16 +148,16 @@ const deleteOneHiking = function (req, res) {
     Hiking.findByIdAndDelete(hikingId).exec()
         .then(hiking => {
             message = CommonFunctions._validateHiking(hiking);
-            CommonFunctions._fillResponse(response, process.env.STATUS_OK, { "message": "succesfully deleted below hiking " + message });
+            CommonFunctions._fillResponse(response, process.env.STATUS_OK, { message: process.env.SUCCESSFULLY_DELETED + message });
         })
-        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { "message": "Hiking Id is not valid" }))
+        .catch(() => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, { message: process.env.INVALID_HIKING_ID }))
         .finally(() => CommonFunctions._sendResponse(response, res))
 }
 
 const deleteAllHikings = function (req, res) {
     let response = CommonFunctions._responseDeclaration();
     Hiking.deleteMany({})
-        .then(() => CommonFunctions._fillResponse(response, process.env.STATUS_OK, { "message": "Succesfully deleted all hikings" }))
+        .then(() => CommonFunctions._fillResponse(response, process.env.STATUS_OK, { message: process.env.SUCCESSFULLY_DELETED }))
         .catch((error) => CommonFunctions._fillResponse(response, process.env.STATUS_INTERNAL_ERROR, error))
         .finally(() => CommonFunctions._sendResponse(response, res))
 }

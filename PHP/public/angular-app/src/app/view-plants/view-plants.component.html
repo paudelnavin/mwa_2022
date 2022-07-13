@@ -10,7 +10,7 @@
           <th scope="col">Longitude</th>
           <th scope="col">Latitude</th>
           <th scope="col">Actions 
-              <button routerLink="/gethikings/{{hikingId}}/addplants">Add Route Plants</button>
+              <button routerLink="/gethikings/{{hikingId}}/addplants" *ngIf="isLoggedIn">Add Route Plants</button>
             </th>
         </tr>
       </thead>
@@ -22,8 +22,8 @@
           <td>{{plant.location.coordinates[0]}}</td>
           <td>{{plant.location.coordinates[1]}}</td>
           <td>
-              <button routerLink="/gethikings/{{hikingId}}/editplants/{{plant._id}}" >Edit Route Plant</button>
-              <button (click)="onDelete(plant)">Delete Plant</button>
+              <button routerLink="/gethikings/{{hikingId}}/editplants/{{plant._id}}" *ngIf="isLoggedIn">Edit Route Plant</button>
+              <button (click)="onDelete(plant)" *ngIf="isLoggedIn">Delete Plant</button>
           </td>
         </tr>
       </tbody>

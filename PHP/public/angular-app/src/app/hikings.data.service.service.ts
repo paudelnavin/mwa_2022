@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Hiking, RoutePlants } from './hikings/hikings.component';
 import { Credentials } from './login/login.component';
 import { User } from './register/register.component';
@@ -11,7 +12,7 @@ import { User } from './register/register.component';
 export class HikingsDataService {
 
   private value = false
-  private baseUrl = "http://localhost:3000/api"
+  private baseUrl = environment.Backend_URL
   constructor(private _http: HttpClient) { }
 
   public getHikings(offset: Number, count: Number): Observable<Hiking[]> {
